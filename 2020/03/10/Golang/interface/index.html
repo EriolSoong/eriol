@@ -1,37 +1,1083 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+  
 
 
-{% block content %}
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/cat_track_48px.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cat_track_32px.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cat_track_16px.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Golang,Interface," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Go语言中的interface没有强制要求实现方法，但是interface是go中非常强大的工具之一。任一类型都可以实现interface中的方法，interface中的值可以代表是各种类型的值，这就是Go中实现多态的基础 什么是接口interface就是字面意思——接口，C++中可以用虚基类表示；Java中就是interface。 我们之前在结构体和方法的博文中提到了很多有关于对象和属性的知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang中的interface（接口）">
+<meta property="og:url" content="https://eriolsoong.github.io/2020/03/10/Golang/interface/index.html">
+<meta property="og:site_name" content="知悟崖">
+<meta property="og:description" content="Go语言中的interface没有强制要求实现方法，但是interface是go中非常强大的工具之一。任一类型都可以实现interface中的方法，interface中的值可以代表是各种类型的值，这就是Go中实现多态的基础 什么是接口interface就是字面意思——接口，C++中可以用虚基类表示；Java中就是interface。 我们之前在结构体和方法的博文中提到了很多有关于对象和属性的知识点">
+<meta property="og:locale">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GS5SL6.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GS4xQ1.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GS5CdO.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GS4jzR.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GS4OJJ.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GS5PoD.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GS5FFe.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GS5VSA.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GS5ZQI.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GS5eyt.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GSTVSJ.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/26/GpCDhj.png">
+<meta property="article:published_time" content="2020-03-09T17:53:27.000Z">
+<meta property="article:modified_time" content="2020-03-26T09:25:26.613Z">
+<meta property="article:author" content="Eriol Soong">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="Interface">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/03/26/GS5SL6.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://eriolsoong.github.io/2020/03/10/Golang/interface/"/>
+
+
+
+
+
+  <title>Golang中的interface（接口） | 知悟崖</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">知悟崖</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
 
   <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://eriolsoong.github.io/2020/03/10/Golang/interface/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Cat_128px_avatar.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="知悟崖">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Golang中的interface（接口）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-10T01:53:27+08:00">
+                2020-03-10 01:53:27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Golang/" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/10/Golang/interface/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/10/Golang/interface/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/03/10/Golang/interface/" class="leancloud_visitors" data-flag-title="Golang中的interface（接口）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>Go语言中的interface没有强制要求实现方法，但是interface是go中非常强大的工具之一。任一类型都可以实现interface中的方法，interface中的值可以代表是各种类型的值，这就是Go中实现多态的基础</code></p>
+<h2 id="什么是接口"><a href="#什么是接口" class="headerlink" title="什么是接口"></a>什么是接口</h2><p>interface就是字面意思——接口，C++中可以用虚基类表示；Java中就是interface。</p>
+<p>我们之前在<a href="">结构体</a>和<a href="">方法</a>的博文中提到了很多有关于对象和属性的知识点。而interface则使Golang更接近面向对象编程范式的另一个难点</p>
+<p>interface是方法签名的一个集合，这些方法可以被<strong>任一</strong>类型通过方法实现。因此接口就是对象行为的申明（不是定义，仅仅表示方法签名，也可以称作函数原型）。</p>
+<blockquote>
+<p>💡注意：我多次强调 任一类型 ，Golang中所有类型都可以实现自己的方法，详情见<a href="">方法</a>一问文的介绍，为了便于理解，本文还是使用 struct（结构体）来做示例</p>
+</blockquote>
+<p>举个例子🌰，狗会走路也会汪汪叫，如果在一个<em>接口</em>中申明了<strong>Walk</strong>方法签名代表走路，<strong>Bark</strong>方法签名表示狗叫，然后我们有个结构体对象<strong>Dog</strong>，我们就说Dog实现了这个接口。</p>
+<p>所以，<em>接口</em>的任务就是提供方法签名，方法签名由<strong>方法名</strong>，输入参数，返回值**三部分组成，任一类型可以实现这些方法，比如struct结构体。</p>
+<p>如果你是一个OOP（面向对象）类型的程序员，你可能用过<strong>implement</strong>关键字来实现一个<em>接口</em>，但是在Golang中，你不需要明确的使用关键字来表示你实现了一个<em>接口</em>，如果你使用的类型实现了一个<em>接口</em>中的<strong>所有</strong>方法签名，那么Golang就默认你实现了这个接口。</p>
+<blockquote>
+<p>💡注意：一个类型定义了一个或多个方法，方法的名字，参数，返回值和接口中的方法签名完全一致，并且接口中的所有方法签名在这个类型中都存在，那么我们称为实现了这个接口</p>
+</blockquote>
+<p>举🌰，如果我们说一个东西，走起来像鸭子，游泳像鸭子，并且叫起来像鸭子，那么在Golang中我们就认为它就是一只🦆！！</p>
+<h2 id="申明一个接口"><a href="#申明一个接口" class="headerlink" title="申明一个接口"></a>申明一个接口</h2><p>类似<strong>struct</strong>的申明方法，我们需要使用interface关键字来定义<em>类型别名</em>来方便使用接口。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">type</span> Shape interface &#123;</span><br><span class="line">    Area()		float64	//面积</span><br><span class="line">    Perimeter	float64	//周长</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的例子中，我们定义了一个<strong>Shape</strong>接口，其中包含了两个方法签名：<strong>Area， Perimeter</strong>，无形参，返回float64值。任何类型，如果实现了和这两个签名形式一样<em>（同样的方法名，同样的传参，同样的返回值）</em>的方法，我们就称这个类型实现了<strong>Shape</strong>这个接口</p>
+<p>由于<em>接口</em> 是一种类似<em>结构体</em> 的类型，我们可以创建一个<strong>Shape</strong>类型的变量<strong>s</strong>。</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GS5SL6.png" alt="img"></p>
+<p>上面的例子虽然简单，但是包含了很多信息，让我来理理<em>接口</em> 的概念。<em>接口</em> 包含两个类型（听上去有点奇奇怪怪）和一个值。</p>
+<p>类型呢，一种是静态类型，另一种就是动态类型。静态类型就是指接口本身的类型，比如上图中的<strong>Shape</strong> 就是静态类型。</p>
+<p>值只有动态值（<strong>没有静态值</strong>）。一个接口类型的变量只能表示实现了这个接口的动态类型的值。这个<strong>动态类型</strong>的变量就是这个接口的<strong>动态值</strong>。（ok，不知道有没有被我绕晕，晕了没事，这里做好笔记，继续往下看，回头再来理解这里的概念就明白了。^.^）</p>
+<p>从上面的例子中，我们可以发现，接口类型变量值和类型都是<em>nil</em> 。这是因为，我们这里声明的是<strong>Shape</strong> 变量，它还没有指定动态类型，更没有指定任何动态值。</p>
+<p>当我们用<strong>fmt.Println</strong>函数的时候，它接受的就是接口类型的参数，第一个<strong>Println</strong>的参数就是指向了这个接口的动态值，第二个<strong>Println</strong>的参数指向的就是这个接口的动态类型。</p>
+<blockquote>
+<p>💡 事实上， 接口 s 是有个静态的类型的：Shape</p>
+</blockquote>
+<h2 id="接口的实现"><a href="#接口的实现" class="headerlink" title="接口的实现"></a>接口的实现</h2><p>接着上🌰，我们先定义一个包含<strong>Area</strong>和<strong>Perimeter</strong>方法签名的<strong>Shape</strong>接口。然后我们创建一个实现了<strong>shape</strong>接口的结构体<strong>Rect</strong>(实现了以上两个方法)</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GS4xQ1.png" alt="img"></p>
+<p>在上面的程序中，我们定义了一个<strong>Shape</strong>接口和<strong>Rect</strong>结构体。然后<strong>Rect</strong>实现了<strong>Area</strong>和<strong>Perimeter</strong>方法，这就实现了<strong>Shape</strong>接口的所有方法签名，所以我们就说<strong>Rect</strong>实现了<strong>Shape</strong>接口（这是Golang默认的，自动实现）。但是我们并没有明确的显式指明<strong>Rect</strong>实现了<strong>Shape</strong>接口，（如果是java语言则需要使用implement指明实现了某个接口，比如 public class Rect implement Shape)。</p>
+<p>当一个类型实现了某个接口，这个类型的变量也可以用它所实现的接口类型表示（或者说用接口类型的变量去存放）。我们可以声明一个<strong>Shape</strong>接口类型的便令<em>s</em> ，然后用<em>s</em> 去接<strong>Rect</strong>类型的对象。（上图24,25行代码）</p>
+<blockquote>
+<p>💡 其实上面我们已经使用了多态的特性</p>
+</blockquote>
+<p>因为<strong>Rect</strong>实现了<strong>Shape</strong>接口，所以第25行代码是完全有效的。我们可以看到，接口变量 <em>s</em> 的动态类型就是<strong>Rect</strong>，动态值就是<strong>Rect</strong>结构体对象 {5,4} </p>
+<blockquote>
+<p>💡 我们用<strong>动态</strong>这个词，是因为我们也可以给接口变量 s 赋值另一个实现了 Shape接口的结构体类型， 所以 s 实际指向的对象类型不是固定的，是动态的</p>
+</blockquote>
+<p>有时候 <em>接口</em>  的动态类型也叫做具体类型，因为我们获取接口类型的时候，它返回的是隐藏的动态值的类型，它的静态类型一直是隐式状态。</p>
+<p>我们可以用 <em>s</em> 调用<strong>Area</strong>方法，因为<strong>Shape</strong>接口定义了<strong>Area</strong>方法并且 <em>s</em> 的具体类型<strong>Rect</strong>也实现了该方法。所以 s 调用的方法是动态对象的方法。</p>
+<p>我们也可以比较变量 <em>s</em> 和 <em>r</em> 的值，因为此时他们动态的类型都是<strong>Rect</strong>类型，动态值都是 <em>{5,4}</em> 。</p>
+<p>让我们改变 <em>s</em> 的动态类型和动态值：</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GS5CdO.png" alt="img"></p>
+<p>我们定义了一个新的结构体<strong>Circle</strong>，它也实现了<strong>Shape</strong>接口，所以我们可以给变量 <em>s</em> 赋一个<strong>Circle</strong>类型的值。我想你现在应该明白了为啥接口的值和类型都是动态的。</p>
+<p>猜猜下面程序会发生什么？</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GS4jzR.png" alt="img"></p>
+<p>上面程序中，我们删除了<strong>Perimeter</strong>方法，这个程序就编译不过并且抛出一个错误。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">program.go:<span class="number">22</span>: cannot use Rect literal (<span class="built_in">type</span> Rect) <span class="keyword">as</span> <span class="built_in">type</span> Shape <span class="keyword">in</span> assignment:</span><br><span class="line">        Rect does <span class="keyword">not</span> implement Shape (missing Perimeter method)</span><br></pre></td></tr></table></figure>
+
+<p>从上面的错误中我们可以很容易的理解实现接口的要求：我们需要实现接口中申明的所有方法签名。这也解释了我之前说的要实现接口中的<strong>所有</strong>方法，看到这里应该有了清晰的理解。</p>
+<h2 id="空接口"><a href="#空接口" class="headerlink" title="空接口"></a>空接口</h2><p>当一个接口没有申明任何方法签名，它就是<strong>空接口</strong>，用**interface{}**表示。因为空接口没有方法签名，所以所有的类型都是隐式实现了空接口。</p>
+<p>现在你知道标准库<strong>fmt</strong>中的<strong>Println</strong>函数是如何接收不同类型的参数没？就是使用了空接口，让我们看看<strong>Println</strong>的函数签名</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">func Println(a ...interface&#123;&#125;) (n <span class="built_in">int</span>, err error)</span><br></pre></td></tr></table></figure>
+
+<p>如你所见，<em>Println</em> 是一个接收接口类型的可变参数函数。下面来更深入的了解一下.</p>
+<p>我们创建一个<strong>explain</strong>函数，有一个空接口类型的输入参数，无返回值。用它来解释动态类型和空接口。</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GS4OJJ.png" alt="img"></p>
+<p>上面的程序中，我们创建了一个自定义字符串类型<strong>MyString</strong>和一个结构体<strong>Rect</strong>。因为<strong>explain</strong>函数接收的 <em>空接口</em> 类型的参数，所以我们可以传入一个 <strong>MyString</strong>，<strong>Rect</strong>，或者其他类型的变量。因为所有类型实现了空接口<strong>interface{}**，所以这样使用是合法的。又一次完美体现了多态的特性。</strong>explain**的形参 <em>i</em> 静态类型是接口类型，但是它的动态类型是我们传入参数的类型。</p>
+<h2 id="多接口"><a href="#多接口" class="headerlink" title="多接口"></a>多接口</h2><p>一个类型可以实现多个接口，也可以理解为多继承。直接上🌰🌰🌰🌰</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GS5PoD.png" alt="img"></p>
+<p>上面的程序中，我们创建了一个有<strong>Area</strong>方法<strong>Shape</strong>接口和一个用<strong>Volume</strong>方法的<strong>Object</strong>接口。结构体<strong>Cube</strong>同时实现了这两个方法，所以也就同时实现了这两个接口。所以我可以把<strong>Cube</strong>类型的值赋值给<strong>Shape</strong> 和<strong>Object</strong>接口类型的变量。</p>
+<p>我们指定变量 <em>s</em> 和 <em>o</em> 的动态值都是 <em>c</em>，我们可以用 <em>s</em> 调用 <strong>Area</strong>方法，用 <em>o</em> 调用<strong>Volume</strong>方法，因为 <em>s</em> 申明了<strong>Area</strong>方法签名，<em>o</em> 申明了<strong>Volume</strong>方法签名，所以这样用是合法的。但是如果我们用 <em>s</em> 调用<strong>Volume</strong>方法，用 <em>o</em> 调用<strong>Area</strong>方法，会发生什么呢？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fmt.Println(<span class="string">&quot;volume of s of interface type Shape is &quot;</span>, s.Volume())</span><br><span class="line">fmt.Println(<span class="string">&quot;area of o of interface type Object is&quot;</span>, o.Area())</span><br></pre></td></tr></table></figure>
+
+<p>然后呢，就出现了一下的错误：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">program.go:<span class="number">31</span>: s.Volume undefined (<span class="built_in">type</span> Shape has no field <span class="keyword">or</span> method Volume)</span><br><span class="line">program.go:<span class="number">32</span>: o.Area undefined (<span class="built_in">type</span> Object has no field <span class="keyword">or</span> method Area)</span><br></pre></td></tr></table></figure>
+
+<p>这个程序是编译不过的，因为 <em>s</em> 的静态类型是<strong>Shape</strong>，<em>o</em> 的静态类型是<strong>Object</strong>。但是<strong>Shape</strong>没有定义<strong>Volume</strong>方法，<strong>Object</strong>没有定义<strong>Area</strong>方法，所以就会产生以上错误。</p>
+<p>为了让上面程序正常运行，我们需要设法获取这些接口的动态值——Cube类型对象（实现了这些接口的类型）。这时候我们就要用到<strong>类型断言</strong>，下面有请<strong>类型断言</strong>。</p>
+<h2 id="类型断言"><a href="#类型断言" class="headerlink" title="类型断言"></a>类型断言</h2><p>我们创建一个变量 <em>i</em> ，<em>i</em> 是接口类型，这时候我们需要把 <em>i</em> 转换成它所代表的的静态类型，我们就可以使用语法：</p>
+<p><strong>i.(Type)**， Type代表的目标类型，这个类型实现了 <em>i</em> 的静态类型接口。 Go会检查 <em>i</em> 的动态类型是不是</strong>Type**类型，如果是，就返回对应的静态值（静态对象）。</p>
+<p>例子🌰来了：</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GS5FFe.png" alt="img"></p>
+<p>上面的程序中，<strong>Shape</strong>类型的变量 <em>s</em> 的动态值是 <strong>Cube</strong> 类型的。我们可以使用 <em>s.(Cube)</em> 语法来获取这个 s 的动态值，并且赋值给 <em>s</em>。这样我们就可以用 <em>c</em> 调用 <strong>Area</strong>和<strong>Volume</strong>方法了，因为 c 是 <strong>Cube</strong> 类型的， <strong>Cube</strong> 同时实现了这两个方法。</p>
+<p>注意，如果使用类型断言语法：<em>i.(Type)</em>, 但是接口变量 <em>i</em> 得动态值不是 <strong>Type</strong> 类型的，也就是说，<strong>Type</strong> 没有实现 <em>i</em> 的接口，那么Go编译器会抛出一个<strong>编译错误</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">impossible <span class="built_in">type</span> assertion:</span><br><span class="line">Type does <span class="keyword">not</span> implement i (missing Area method)</span><br></pre></td></tr></table></figure>
+
+<p>但是，即使 <strong>Type</strong> 实现了 <em>i</em> 的接口，如果 i 没有赋予<strong>Type</strong>类型的静态值，就是说 <em>i = nil</em> ，这时候执行这个类型断言的话，Go就会在程序运行过程中抛出一个<strong>运行错误</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">panic: interface conversion: main.Shape <span class="keyword">is</span> nil, <span class="keyword">not</span> main.Cube</span><br></pre></td></tr></table></figure>
+
+<p>但是呢，我们还是有方法能避免<strong>运行错误</strong>的，需要用另一种 <strong>类型断言</strong> 语法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">value, ok := i.(Type)</span><br></pre></td></tr></table></figure>
+
+<p>在上面的语法中，我们可以用bool类型的变量 <em>ok</em> 来检查 <em>i</em> 是否指向动态类型 <strong>Type</strong> 的值。如果不是，那么 ok 就是 false， 并且 vlaue 就等于 nil。这样通过 ok 来判断，程序在运行过程中也不会报错了。</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GS5VSA.png" alt="img"></p>
+<p>因为接口变量 <em>s</em> 的动态值是 <strong>Cube</strong> 类型的，而 <strong>Cube</strong> 又实现了 <strong>Object</strong> 接口，所以第一个类型断言是成功的。<em>value1</em> 的静态类型就是 <strong>Object</strong>，<em>value1</em> 也是指向 <em>s</em> 的动态值 {3}（通过 <em>Printf</em> 的打印结果可以看出来）。</p>
+<p>但是，因为接口变量 <em>s</em> 的动态类型 <strong>Cube</strong> 没有实现 <strong>Skin</strong> 类型，所以 <em>ok2</em> 的值是 <em>false</em> ，<em>value2</em> 的值是 <em>nil</em> （接口类型的零值）。如果我们使用简化的类型断言语法 “ value2 := s.(Skin) ” ，那么在程序运行的时候就会抛出以下的错误：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">panic: interface conversion: main.Cube <span class="keyword">is</span> <span class="keyword">not</span> main.Skin: missing method Color</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️ 注意：我们使用类型断言获取到该接口的动态值后，我们就能通过它获取这个动态值的属性和方法。但是你不能直接通过接口类型对象直接去获取它指向的动态值的属性信息。</p>
+<p>简而言之，获取任何接口类型没有定义的属性或者方法，都会引起运行时错误。所以在必要的时候，记得使用类型断言进行转换和判断。</p>
+</blockquote>
+<p><strong>类型断言</strong> 不仅仅只是用来判断某个接口是否指向了某个具体值。我们也用来从一个接口类型到另一个接口类型的转换（请看上面的例子：<em>s.(Skin)</em> ；或者看<a target="_blank" rel="noopener" href="https://play.golang.org/p/GUpJKfGQC6D">这个例子</a>）。</p>
+<h2 id="Switch"><a href="#Switch" class="headerlink" title="Switch"></a>Switch</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> fmt</span><br><span class="line"></span><br><span class="line"><span class="built_in">type</span> MyString string</span><br><span class="line"></span><br><span class="line"><span class="built_in">type</span> Rect struct &#123;</span><br><span class="line">    Width	<span class="built_in">float</span></span><br><span class="line">    Height	<span class="built_in">float</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func explain(i interface&#123;&#125;) &#123;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;value give to explain function is of type:%T with value:%v&quot;</span>, i, i)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    myString := MyString&#123;<span class="string">&quot;hello, world&quot;</span>&#125;</span><br><span class="line">    r := Rect&#123;<span class="number">5.5</span>, <span class="number">4.5</span>&#125;</span><br><span class="line">    explain(myString)</span><br><span class="line">    explain(r)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在，让我们看看空接口对的作用，上面的例子是之间空接口那一节中用的例子，<em>explain</em> 函数有一形参是空接口类型的，我们可以传任何参数进去。</p>
+<p>但是如果有一个<strong>string</strong>类型的参数，我们把这个参数传入 <em>explain</em> 函数中，并且把这个字符串的转成所有字母大写冰打印。这时候我们该怎么做呢。</p>
+<p>我们可以用 <strong>string</strong> 包的 <strong>ToUpper</strong> 这个函数，但是这个函数只接受字符串类型的参数，在 <em>explain</em> 中使用 <strong>ToUpper</strong> 函数之前，我们需要确认传入的接口变量的动态类型是否是字符串类型。</p>
+<p>这时候我们就可以用到 <strong>Switch</strong> 关键字了。<strong>Switch</strong> 语法很类似之前用的 <strong>类型断言</strong> 的语法：<em>i.(Type)</em> ，<em>i</em> 是一个接口，<em>type</em> 是一个内置关键字。这里 <em>i.(type)</em> 得到的是这个接口的动态类型，而不是类型断言一节中得到的是动态值。</p>
+<blockquote>
+<p>💡 注意 i.(type) 这个语法只用在 <strong>switch</strong> 语句中</p>
+</blockquote>
+<p>让我们来看个例子：</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GS5ZQI.png" alt="img"></p>
+<p>在上面的例子中，我们用  <strong>Switch</strong> 修改了 <em>explain</em> 函数，当我们使用 explain 函数的时候，i 接收的参数既包含了传入参数的动态类型和动态值。</p>
+<p>在 <strong>Switch</strong> 中使用 i.(type)，我们可以获取 i 的动态类型。然后在 <strong>Switch</strong> 中使用：<strong>case</strong> 关键字 + 类型，这种方式来判断是否符合 i 的动态类型。</p>
+<p>在 <strong>case string</strong> 块中，我们使用 <em>strings.ToUpper</em> 函数来把字符串转换成大写模式。但是 <em>strings.ToUpper</em> 函数只接受字符串类型参数，所以我们需要用 <strong>类型断言</strong> 来获取影藏在 <em>i</em> 中的动态值。 </p>
+<h2 id="接口的嵌套"><a href="#接口的嵌套" class="headerlink" title="接口的嵌套"></a>接口的嵌套</h2><p>在Go语言中，一个接口不能实现或者扩展另一个接口，只能通过组合的方式，把多个接口组合成一个新的接口。下面重写<strong>Shape—Cube</strong>程序来感受一下：</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GS5eyt.png" alt="img"></p>
+<p>上面的程序中，因为<strong>Cube</strong>实现了 <em>Area</em> 和 <em>Volume</em> 方法，所以<strong>Cube</strong>同时实现了<strong>Shape</strong> 和<strong>Object</strong>接口。又因为<strong>Material</strong>接口是由<strong>Shape</strong>和<strong>Object</strong>组合而成，所以<strong>Cube</strong>也实现了<strong>Material</strong>接口。</p>
+<p>就像匿名嵌套结构体，这是可行的，所有内嵌接口中的方法签名也都属于父接口，父接口可以随意访问。</p>
+<h2 id="指针接收者和值接收者"><a href="#指针接收者和值接收者" class="headerlink" title="指针接收者和值接收者"></a>指针接收者和值接收者</h2><p>本文直到这里，所有方法都是用的值接收者的方式。如果使用指针接收者，这些程序还是否可行？让我们来检验一下：</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/GSTVSJ"><img src="https://s1.ax1x.com/2020/03/26/GSTVSJ.png" alt="GSTVSJ.png"></a></p>
+<p>在上面的程序中，<em>Area</em> 方法属于 *<strong>Rect</strong>类型，因此 <em>Area</em> 的接收者会去获取是 <strong>Rect</strong> 类型的指针（即使使用Rect类型的值去调用，底层也会转换成 *Rect 类型去调用）。但是，上诉程序将会编译不通过，go编译器会报编译错误。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">program.go:<span class="number">27</span>: cannot use Rect literal (<span class="built_in">type</span> Rect) <span class="keyword">as</span> <span class="built_in">type</span> Shape <span class="keyword">in</span> assignment: Rect does <span class="keyword">not</span> implement Shape (Area method has pointer receiver)</span><br></pre></td></tr></table></figure>
+
+<p>这是什么鬼！<strong>Rect</strong> 明明已经实现了 <strong>Shape</strong> 接口的所有方法签名，这是怎么回事呢，<strong>Rect</strong>表示不服！凭什么提示 <em>Rect does not implement Shape</em>。</p>
+<p>在仔细品品上面的错误，后面还有一句 <em>Area method has pointer receiver</em> 。所以 <em>Area</em> 的接收者是指针类型将会发生什么情况呢。</p>
+<p>一个结构类型的方法(比如上面的Rect结构体的Area方法)，它的接收者无论是这个结构体的指针类型，还是值类型，我们都可以用 <em>r.Area()</em> 来调用，这是不会报错的，完全合法！</p>
+<p>但是，在实现接口的情况下，可能会有一点点的不同。上面程序中，接口 <em>s</em> 的动态类型是<strong>Rect</strong>，<strong>Rect</strong>类型没有实现 <em>Area</em> 方法，而是 *<strong>Rect</strong> 类型实现了 <em>Area</em> 方法。</p>
+<blockquote>
+<p>💡 在Golang中 <strong>Rect</strong> 类型 和 <strong>*Rect** 类型是两种不同的类型，在使用Rect类型变量调用方法的时候，Golang底层会去自动转换成指定的接收者类型去调用该方法。但是，在接口的实现中，<strong>Rect</strong>实现的方法，不代表 *</strong>Rect *<em>就实现了该方法。就像上面的程序，**</em>Rect<strong>实现了 <em>Area</em> 方法，但是 **Rect</strong> 没有实现 <em>Area</em> 方法，Golang底层不会默认 <strong>Rect</strong> 也实现了 <em>Area</em> 方法。</p>
+</blockquote>
+<p>所以让上面的程序可以顺利编译通过，我们可以给 <em>s</em> 接口变量分配一个 <strong>*Rect** 类型值（取 <em>r</em> 的地址），而不是直接把 <strong>Rect</strong> 类型值（r）直接赋值给 <em>s</em> 。 这样接口变量 s 的动态类型就是 *</strong>Rect** 类型了，*<strong>Rect</strong> 类型实现了 <em>Area</em> 方法。</p>
+<p>用上面的方法重写程序：</p>
+<p><img src="https://s1.ax1x.com/2020/03/26/GpCDhj.png" alt="GpCDhj.png"></p>
+<p>仅仅改变了<strong>第25行</strong>代码，编译完美通过并成功执行。</p>
+<p>但是，有个问题，虽然 *<strong>Rect</strong> 没有实现 <em>Perimeter</em>，但是<em>s.Perimeter()</em> 调用没有报错，<strong>这也是我不理解的一个地方，有哪位大侠知道的话，请指教一二</strong>。</p>
+<blockquote>
+<p>我还是希望Go语言在处理接口实现的时候能统一一下这方面的细节，既然已经做到语法格式如此的严格，那么就请严格到底吧！</p>
+</blockquote>
+<h2 id="接口的比较"><a href="#接口的比较" class="headerlink" title="接口的比较"></a>接口的比较</h2><p>两个接口可以通过比较运算符 <strong>==</strong> ，**!=<strong>来进行比较。如果是两个空接口，那么这两个总是相等的。所以 **==</strong> 操作符返回 true。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var a, b interface&#123;&#125;</span><br><span class="line">fmt.Println(a==b)	// true</span><br><span class="line">fmt.Println(a!=b)	// false</span><br></pre></td></tr></table></figure>
+
+<p>如果两个不是空接口，那么只有当他们的动态类型和动态值都相等的情况下，他们才相等（==操作符返回true）。</p>
+<p>上面的情况都是基于动态类型都能比较的情况下进行的，如果动态类型不能比较呢（比如：slice，map，array， function和结构体等），那么，执行比较操作的时候会抛出运行时异常。</p>
+<h2 id="接口的用处"><a href="#接口的用处" class="headerlink" title="接口的用处"></a>接口的用处</h2><p>到此为止，接口的特性和使用方法基本都讲完了，总结一下接口的用处吧：</p>
+<ol>
+<li>作为函数和方法的参数使用，这时候你可能会用到 类型断言 或者 switch语法。</li>
+<li>多态的使用，在程序设计过程中，可能需要抽象出某些对象共同拥有的方法，这时候多种类型需要实现同一接口，然后通过接口变量指向具体对象来操作这些方法。</li>
+</ol>
+<p>咔~杀青！，有任何问题欢迎留言！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Golang/" rel="tag"># Golang</a>
+          
+            <a href="/tags/Interface/" rel="tag"># Interface</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/24/Python/Python%E5%85%A5%E9%97%A8/" rel="next" title="Python ABC">
+                <i class="fa fa-chevron-left"></i> Python ABC
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
 
     <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+      
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+          </div>
+          
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/Cat_128px_avatar.ico"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.</span> <span class="nav-text">什么是接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%B3%E6%98%8E%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.</span> <span class="nav-text">申明一个接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">接口的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E6%8E%A5%E5%8F%A3"><span class="nav-number">4.</span> <span class="nav-text">空接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%8E%A5%E5%8F%A3"><span class="nav-number">5.</span> <span class="nav-text">多接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80"><span class="nav-number">6.</span> <span class="nav-text">类型断言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Switch"><span class="nav-number">7.</span> <span class="nav-text">Switch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%B5%8C%E5%A5%97"><span class="nav-number">8.</span> <span class="nav-text">接口的嵌套</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E6%8E%A5%E6%94%B6%E8%80%85%E5%92%8C%E5%80%BC%E6%8E%A5%E6%94%B6%E8%80%85"><span class="nav-number">9.</span> <span class="nav-text">指针接收者和值接收者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-number">10.</span> <span class="nav-text">接口的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E7%94%A8%E5%A4%84"><span class="nav-number">11.</span> <span class="nav-text">接口的用处</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eriol Soong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">一生温柔纯良，不舍爱与自由</div>
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"> 访客数 </i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"> 总访问量 </i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'YjqQcNtzfYrypYWVjfCoA9fP-gzGzoHsz',
+        appKey: '0FThdtYykCHfd5InycE6DXH7',
+        placeholder: 'O(∩_∩)O 来呀，快活呀~',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("4Rmt4YDnSzd1wspfIob3v1kz-gzGzoHsz", "Fpl9pySxIMpTPYV2xIndv0ES");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
